@@ -40,11 +40,6 @@ var start = async (params) => {
     await require('./integral').gamebox(request, options)
   }, taskOption)
 
-  // 首页-积分商城-定向积分专区-每日抽奖(1次免费及5次花费定向积分抽奖)
-  await scheduler.regTask('dailylotteryintegral', async (request) => {
-    await require('./dailyShop').dailyintegrallottery(request, options)
-  }, taskOption)
-
   // 首页-游戏-娱乐中心-沃之树
   await scheduler.regTask('dailywoTree', async (request) => {
     await require('./woTree').doTask(request, options)
@@ -379,34 +374,6 @@ var start = async (params) => {
   }, {
     ...taskOption,
     startTime: 21.5 * 3600,
-    ignoreRelay: true
-  })
-
-  // 每日0点自动兑换流量
-  await scheduler.regTask('exchangeDFlow', async (request) => {
-    await require('./exchangeDFlow').doTask(request, options)
-  }, {
-    ...taskOption,
-    startTime: 0,
-    startHours: 0,
-    ignoreRelay: true
-  })
-
-  // 定时检测流量兑换
-  // 可使用 --exchangeDFlowCircle-intervalTime 1800 选项指定流量检查间隔时间，单位秒
-  // 可使用 --exchangeDFlowCircle-minFlow 200 选项指定流量检查最小值
-  // 可使用 --exchangeDFlowCircle-productId 21010621565413402 选项指定兑换流量包ID
-  let { 'exchangeDFlowCircle-intervalTime': intervalTime = 1800 } = options
-  if (typeof intervalTime !== 'number') {
-    intervalTime = 1800
-  }
-  await scheduler.regTask('exchangeDFlowCircle', async (request) => {
-    await require('./exchangeDFlow').doCircleCheck(request, options)
-  }, {
-    ...taskOption,
-    isCircle: true,
-    intervalTime: intervalTime,
-    startTime: 5 * 60,
     ignoreRelay: true
   })
 
